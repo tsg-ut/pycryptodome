@@ -257,7 +257,7 @@ STATIC void product(uint64_t *t, uint64_t *scratchpad, const uint64_t *a, const 
  * @param words The number of words of a, b, and out
  * @return      0 for success, the appropriate code otherwise.
  */
-STATIC FUNC_SSE2 int mont_select(uint64_t *out, const uint64_t *a, const uint64_t *b, unsigned cond, size_t words)
+STATIC FUNC_SSE2 int mod_select(uint64_t *out, const uint64_t *a, const uint64_t *b, unsigned cond, size_t words)
 {
     uint64_t mask;
 #if defined(USE_SSE2)
@@ -335,7 +335,7 @@ void add_mod(uint64_t* out, const uint64_t* a, const uint64_t* b, const uint64_t
      * If there is no borrow or if there is carry,
      * tmp1[] is larger than modulus, so we must return tmp2[].
      */
-    mont_select(out, tmp2, tmp1, carry | (borrow2 ^ 1), nw);
+    mod_select(out, tmp2, tmp1, carry | (borrow2 ^ 1), nw);
 }
 
 /*
@@ -413,7 +413,7 @@ STATIC void mont_mult_generic(uint64_t *out, const uint64_t *a, const uint64_t *
     /** Divide by R and possibly subtract n **/
     sub(t2, &t[nw], n, nw);
     cond = (unsigned)(t[2*nw] | (uint64_t)ge(&t[nw], n, nw));
-    mont_select(out, t2, &t[nw], cond, (unsigned)nw);
+    mod_select(out, t2, &t[nw], cond, (unsigned)nw);
 }
 
 STATIC void mont_mult_p256(uint64_t *out, const uint64_t *a, const uint64_t *b, const uint64_t *n, uint64_t m0, uint64_t *tmp, size_t nw)
@@ -552,7 +552,7 @@ STATIC void mont_mult_p256(uint64_t *out, const uint64_t *a, const uint64_t *b, 
     /** Divide by R and possibly subtract n **/
     sub(t2, &t[nw], n, WORDS_64);
     cond = (unsigned)(t[PREDIV_WORDS_64-1] | (uint64_t)ge(&t[WORDS_64], n, WORDS_64));
-    mont_select(out, t2, &t[WORDS_64], cond, WORDS_64);
+    mod_select(out, t2, &t[WORDS_64], cond, WORDS_64);
 
 #undef WORDS_64
 #undef PREDIV_WORDS_64
@@ -735,7 +735,7 @@ STATIC void mont_mult_p384(uint64_t *out, const uint64_t *a, const uint64_t *b, 
     /** Divide by R and possibly subtract n **/
     sub(t2, &t[WORDS_64], n, WORDS_64);
     cond = (unsigned)(t[PREDIV_WORDS_64-1] | (uint64_t)ge(&t[WORDS_64], n, WORDS_64));
-    mont_select(out, t2, &t[WORDS_64], cond, WORDS_64);
+    mod_select(out, t2, &t[WORDS_64], cond, WORDS_64);
 
 #undef WORDS_64
 #undef PREDIV_WORDS_64
@@ -1075,7 +1075,7 @@ int mont_sub(uint64_t *out, const uint64_t *a, const uint64_t *b, uint64_t *tmp,
     /*
      * If there is no borrow, tmp[] is smaller than modulus.
      */
-    mont_select(out, scratchpad, tmp, borrow2, ctx->words);
+    mod_select(out, scratchpad, tmp, borrow2, ctx->words);
 
     return 0;
 }
