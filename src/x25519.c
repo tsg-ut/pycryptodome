@@ -2,6 +2,8 @@
 #include "endianess.h"
 #include "bignum.c"
 
+FAKE_INIT(x25519)
+
 /*
  * Fast variable-base scalar multiplication for the Montgomery curve Curve25519
  *
