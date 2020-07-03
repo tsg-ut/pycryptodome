@@ -43,7 +43,6 @@ build/modexp_utils.o: ../modexp_utils.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $^
 
 # ECC
-
 TABLES = build/p256_table.o build/p384_table.o build/p521_table.o
 
 build/p256_table.o: ../p256_table.c
