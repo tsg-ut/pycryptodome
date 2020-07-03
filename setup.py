@@ -428,6 +428,10 @@ ext_modules = [
                  'src/mont.c', 'src/p256_table.c', 'src/p384_table.c',
                  'src/p521_table.c'],
         ),
+    Extension("Crypto.PublicKey._x255219",
+        include_dirs=['src/'],
+        sources=['src/x25519.c']
+        ),
 
     # Math
     Extension("Crypto.Math._modexp",
