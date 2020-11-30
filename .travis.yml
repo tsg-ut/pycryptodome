@@ -19,9 +19,6 @@ matrix:
  - python: pypy3
    env: CFFI=no
  include:
- - python: 2.6
-   env: CFFI=no
-   dist: trusty
  - python: pypy
    arch: amd64
    env: CFFI=yes
