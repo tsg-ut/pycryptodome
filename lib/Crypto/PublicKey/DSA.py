@@ -454,7 +454,6 @@ def generate(bits, randfunc=None, domain=None):
         fmt_error = test_probable_prime(p) == COMPOSITE
         fmt_error = test_probable_prime(q) == COMPOSITE
         # Verify Lagrange's theorem for sub-group
-        fmt_error |= ((p - 1) % q) != 0
         fmt_error |= g <= 1 or g >= p
         fmt_error |= pow(g, q, p) != 1
         if fmt_error:
@@ -520,7 +519,6 @@ def construct(tup, consistency_check=True):
         fmt_error = test_probable_prime(key.p) == COMPOSITE
         fmt_error = test_probable_prime(key.q) == COMPOSITE
         # Verify Lagrange's theorem for sub-group
-        fmt_error |= ((key.p - 1) % key.q) != 0
         fmt_error |= key.g <= 1 or key.g >= key.p
         fmt_error |= pow(key.g, key.q, key.p) != 1
         # Public key
